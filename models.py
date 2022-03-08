@@ -8,7 +8,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 Base = declarative_base()
 
-class Inventory(base):
+class Inventory(Base):
         __tablename__ = 'products'
 
         product_id = Column(Integer, primary_key=True)
