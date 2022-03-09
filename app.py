@@ -14,7 +14,7 @@ def menu():
             input('Please choose one of the options above')
 
 
-
+#where I clean all the data
 def clean_price(price_str):
     try:
         split_price = price_str.split('$') 
@@ -39,8 +39,6 @@ def clean_id(id_str, options):
             print('\nPlease select a Number above')
 
 
-
-
 def clean_date(date_str):
     split_date = date_str.split('/')
     try:
@@ -55,6 +53,7 @@ def clean_date(date_str):
         return return_date
 
 
+#adding the data to the database
 def add_csv():
     with open('inventory.csv') as csvfile:
         data = csv.reader(csvfile)
@@ -109,6 +108,7 @@ def app():
             session.commit()
             print('Product Added!')
             time.sleep(1.5)
+
         elif choice == 'b':
             with open('backup.csv', 'a') as csv_file:
                 header = ['name', ' quantity', ' price', ' date updated']
