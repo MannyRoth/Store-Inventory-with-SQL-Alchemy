@@ -6,7 +6,7 @@ import csv
 
 def menu():
     while True:
-        print('INVENTORY\nv) View Details of Product\na) Add New Product\nb) Make of backup of entire Database\nc) Exit')
+        print('\nINVENTORY\nv) View Details of Product\na) Add New Product\nb) Make of backup of entire Database\nc) Exit')
         choice = input('Select an Option: ').lower()
         if choice in ['v', 'a', 'b','c']:
             return choice
@@ -25,6 +25,21 @@ def clean_price(price_str):
         return
     else:
         return return_price
+
+
+def clean_id(id_str, options):
+    try:
+        product_id = int(id_str)
+    except ValueError:
+        print('Please type a Number')
+    else:
+        if product_id in options:
+            return product_id
+        else:
+            print('\nPlease select a Number above')
+
+
+
 
 def clean_date(date_str):
     split_date = date_str.split('/')
@@ -62,9 +77,18 @@ def app():
     while app_running:
         choice = menu()
         if choice == 'v':
+            id_options = []
             for item in session.query(Inventory):
-                print(f'{item.product_id} | {item.product_name} | {item.product_quantity} | {item.product_price} | {item.date_updated}')
+                id_options.append(item.product_id)
+            while True:
+                id_choice = input(f'ID Options: {id_options}\nBook ID: ')
+                id_choice = clean_id(id_choice, id_options)
+                if id_choice != None:
+                    break
+            the_product = session.query(Inventory).filter(Inventory.product_id==id_choice).first()
+            print(f'ID:{item.product_id} | NAME:{item.product_name} | QUANTITY:{item.product_quantity} | PRICE:{item.product_price} | DATE UPDATED:{item.date_updated}')    
             input('Press Enter to return to Main Menu')
+            
             
         elif choice == 'a':
             product_name = input('Product Name: ')
@@ -86,7 +110,16 @@ def app():
             print('Product Added!')
             time.sleep(1.5)
         elif choice == 'b':
-            pass
+            with open('backup.csv', 'a') as csv_file:
+                header = ['name', ' quantity', ' price', ' date updated']
+                writer = csv.writer(csv_file)
+                writer.writerow(header)
+                products = session.query(Inventory)
+                for product in products:
+                    data = [product.product_name, product.product_quantity, product.product_price, product.date_updated]
+                    writer.writerow(data)
+                input('Backup File was Created. Press Enter to continue')
+
         elif choice == 'c':
             print('Goodbye')
             app_running = False
