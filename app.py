@@ -141,6 +141,5 @@ if __name__ == '__main__':
     app()
     
 
-    for item in session.query(Inventory):
-        print(item)
+
 
