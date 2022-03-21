@@ -17,14 +17,20 @@ def menu():
 #where I clean all the data
 def clean_price(price_str):
     try:
-        split_price = price_str.split('$') 
-        price_float = float(split_price[1])
-        return_price = int(price_float * 100)
-    except IndexError:
+        for letter in price_str:
+            if letter[0] == '$':
+                split_price = price_str.split('$') 
+                price_float = float(split_price[1])
+                return_price = int(price_float * 100)
+                return return_price
+            else:
+                price_float = float(price_str)
+                return_price = int(price_float * 100)
+                return return_price
+    except IndexError or ValueError:
         print('Please input correctly formmatted Price')
         return
-    else:
-        return return_price
+            
 
 
 def clean_id(id_str, options):
@@ -84,8 +90,8 @@ def app():
                 id_choice = clean_id(id_choice, id_options)
                 if id_choice != None:
                     break
-            the_product = session.query(Inventory).filter(Inventory.product_id==id_choice).first()
-            print(f'ID:{item.product_id} | NAME:{item.product_name} | QUANTITY:{item.product_quantity} | PRICE:{item.product_price} | DATE UPDATED:{item.date_updated}')    
+            the_product = (session.query(Inventory).filter(Inventory.product_id==id_choice).first())
+            print(f'ID:{item.product_id} | NAME:{the_product.product_name} | QUANTITY:{the_product.product_quantity} | PRICE:{the_product.product_price} | DATE UPDATED:{the_product.date_updated}')
             input('Press Enter to return to Main Menu')
             
             
@@ -94,7 +100,7 @@ def app():
             product_quantity = input('Product Quantity: ')
             
             while True:
-                product_price = input('Price (ex:$12.99): ')
+                product_price = input('Price (ex:12.99): ')  
                 product_price_int = clean_price(product_price)
                 if product_price_int != None:
                     break
