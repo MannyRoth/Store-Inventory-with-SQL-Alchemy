@@ -49,8 +49,8 @@ def clean_date(date_str):
         day = int(split_date[1])
         year = int(split_date[2])
         return_date = datetime.date(year, month, day)
-    except ValueError:
-        print('Please input correctly formmatted Date')
+    except ValueError or ValueError:
+        print('\nPlease input correctly formmatted Date')
         return
     else:
         return return_date
@@ -111,7 +111,11 @@ def app():
                 
             while True:
                 date_updated = input('Current Date (ex:1/22/3333): ')
-                date_updated = clean_date(date_updated)
+                try:
+                    date_updated = clean_date(date_updated)
+                except IndexError or ValueError:
+                    print('Please input correctly formmatted Date')
+                    return app()
                 if type(date_updated) == datetime.date:
                     break
             new_product = Inventory(product_name = product_name, product_price = product_price, product_quantity = product_quantity, date_updated = date_updated)
