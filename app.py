@@ -16,7 +16,6 @@ def menu():
 
 #where I clean all the data
 def clean_price(price_str):
-    try:
         for letter in price_str:
             if letter[0] == '$':
                 split_price = price_str.split('$') 
@@ -27,9 +26,7 @@ def clean_price(price_str):
                 price_float = float(price_str)
                 return_price = int(price_float * 100)
                 return return_price
-    except IndexError or ValueError:
-        print('Please input correctly formmatted Price')
-        return
+    
             
 
 
@@ -94,16 +91,24 @@ def app():
             print(f'ID:{item.product_id} | NAME:{the_product.product_name} | QUANTITY:{the_product.product_quantity} | PRICE:{the_product.product_price} | DATE UPDATED:{the_product.date_updated}')
             input('Press Enter to return to Main Menu')
             
-            
         elif choice == 'a':
             product_name = input('Product Name: ')
             product_quantity = input('Product Quantity: ')
-            
+            try:
+                product_quantity_int = int(product_quantity)
+            except ValueError:
+                print('\nPlease type a number for the option')
+                return app()
             while True:
-                product_price = input('Price (ex:12.99): ')  
-                product_price_int = clean_price(product_price)
+                product_price = input('Price (ex:12.99): ') 
+                try:
+                    product_price_int = clean_price(product_price)
+                except:
+                    print('\nPlease type an accepted value')
+                    return app()
                 if product_price_int != None:
                     break
+                
             while True:
                 date_updated = input('Current Date (ex:1/22/3333): ')
                 date_updated = clean_date(date_updated)
