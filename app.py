@@ -114,7 +114,7 @@ def app():
                 try:
                     date_updated = clean_date(date_updated)
                 except IndexError or ValueError:
-                    print('Please input correctly formmatted Date')
+                    print('\nPlease input correctly formmatted Date')
                     return app()
                 if type(date_updated) == datetime.date:
                     break
